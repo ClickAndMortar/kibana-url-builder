@@ -20,5 +20,5 @@ const url = kub.buildDiscoverUrl({
     query: {query: 'my query', language: 'lucene'}
 })
 
-// url = http://kibana:5601/app/kibana#/discover?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(_source),interval:auto,query:(language:lucene,query:'my query'),sort:!('@timestamp',desc))"
+// url = http://kibana:5601/app/kibana#/discover?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(_source),interval:auto,query:(language:lucene,query:'my query'),sort:!('@timestamp',desc))
 ```
