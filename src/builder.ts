@@ -1,41 +1,41 @@
-interface RefreshInterval {
+interface KibanaQueryRefreshInterval {
     pause: boolean;
     value: bigint;
 }
 
-interface Period {
+interface KibanaQueryPeriod {
     from: string;
     to: string;
     mode: string;
 }
 
-interface Filter {
+interface KibanaQueryFilter {
 
 }
 
-interface Query {
+interface KibanaQueryQuery {
     language: string;
     query: string;
 }
 
-interface Sort {
+interface KibanaQuerySort {
     field: string;
     direction: string;
 }
 
-interface DiscoverUrlBuildParameters {
+interface KibanaDiscoverUrlBuildParameters {
     host: string;
-    refreshInterval?: RefreshInterval;
-    period?: Period;
+    refreshInterval?: KibanaQueryRefreshInterval;
+    period?: KibanaQueryPeriod;
     columns: string[];
-    filters: Filter[];
+    filters: KibanaQueryFilter[];
     index?: string;
     interval?: string;
-    query?: Query;
-    sort?: Sort;
+    query?: string;
+    sort?: KibanaQuerySort;
 }
 
-export function buildDiscoverUrl({host, refreshInterval, period, columns, filters, index, interval, query, sort}: DiscoverUrlBuildParameters): string {
+export function buildDiscoverUrl({host, refreshInterval, period, columns, filters, index, interval, query, sort}: KibanaDiscoverUrlBuildParameters): string {
     const _g: string[] = []
 
     if (refreshInterval) {
@@ -65,14 +65,12 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
 
     _a.push(`interval:${interval}`)
 
-    if (!query) {
-        query = {
-            language: 'lucene',
-            query: ''
-        }
+    const kibanaQuery: KibanaQueryQuery = {
+        language: 'lucene',
+        query: query ? query : ''
     }
 
-    _a.push(`query:(language:${query.language},query:'${query.query.replace('\'', '\\\'')}')`)
+    _a.push(`query:(language:${kibanaQuery.language},query:'${kibanaQuery.query.replace('\'', '\\\'')}')`)
 
     if (!sort) {
         sort = {
@@ -83,5 +81,5 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
 
     _a.push(`sort:!('${sort.field}',${sort.direction})`)
 
-    return `${host}/app/kibana#/discover?_g=(${_g.join(',')})&_a=(${_a.join(',')})`
+    return `${host.replace(/\/$/, '')}/app/kibana#/discover?_g=(${_g.join(',')})&_a=(${_a.join(',')})`
 }

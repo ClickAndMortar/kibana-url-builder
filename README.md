@@ -1,5 +1,7 @@
 # Kibana URL builder
 
+This library allows building Kibana URLs, for instance when sending notifications.
+
 ## Usage
 
 ```shell
@@ -17,8 +19,24 @@ const url = kub.buildDiscoverUrl({
     host: 'http://kibana:5601',
     columns: ['_source'],
     filters: [],
-    query: {query: 'my query', language: 'lucene'}
+    query: 'my query'
 })
 
 // url = http://kibana:5601/app/kibana#/discover?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(columns:!(_source),interval:auto,query:(language:lucene,query:'my query'),sort:!('@timestamp',desc))
 ```
+
+### Methods
+
+**`buildDiscoverUrl({host, refreshInterval, period, columns, filters, index, interval, query, sort}: DiscoverUrlBuildParameters): string`**
+
+| Parameter | Type | Default | Required | Example |
+|---|---|---|---|---|
+| `host` | `string` | - | x | `http://kibana:5601` |
+| `columns` | `string[]` | `[]` | | `['_source', 'log']` |
+| `filters` | `KibanaQueryFilter[]` | `[]` | | `[]` |
+| `query` | `string` | - | | `foo AND bar` |
+| `period` | `KibanaQueryPeriod` | `{ "from": "now-15m", "mode": "quick", "to": "now" }` | | |
+| `index` | `string` | - | | `my-index-pattern` |
+| `interval` | `string` | `auto` | | `15m` |
+| `refreshInterval` | `KibanaQueryRefreshInterval` | `{ "pause": true, "value": 300000 }` | | |
+| `sort` | `KibanaQuerySort` | `{ "field": "@timestamp", "direction": "desc" }` | | |
