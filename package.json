@@ -1,0 +1,22 @@
+{
+  "name": "@clickandmortar/kibana-url-builder",
+  "version": "0.1.0",
+  "description": "Kibana URL builder",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "keywords": [
+    "kibana",
+    "url",
+    "builder",
+    "elasticsearch"
+  ],
+  "author": "Michael BOUVY <michael.bouvy@clickandmortar.fr>",
+  "license": "MIT",
+  "private": false
+}
