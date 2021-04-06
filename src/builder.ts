@@ -59,9 +59,11 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
         _a.push(`index:'${index}'`)
     }
 
-    if (interval) {
-        _a.push(`interval:${interval}`)
+    if (!interval) {
+        interval = 'auto'
     }
+
+    _a.push(`interval:${interval}`)
 
     if (!query) {
         query = {
