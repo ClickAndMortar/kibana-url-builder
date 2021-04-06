@@ -43,7 +43,7 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
     }
 
     if (!period) {
-        const period: Period = {
+        period = {
             from: 'now-15m',
             to: 'now',
             mode: 'quick'
@@ -64,7 +64,7 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
     }
 
     if (!query) {
-        const query: Query = {
+        query = {
             language: 'lucene',
             query: ''
         }
@@ -73,7 +73,7 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
     _a.push(`query:(language:${query.language},query:'${query.query.replace('\'', '\\\'')}')`)
 
     if (!sort) {
-        const sort: Sort = {
+        sort = {
             field: '@timestamp',
             direction: 'desc'
         }
