@@ -4,7 +4,7 @@
   "description": "Kibana URL builder",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "tsc && npm publish --access public"
+    "build": "tsc"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,6 +1,6 @@
 interface KibanaQueryRefreshInterval {
     pause: boolean;
-    value: bigint;
+    value: bigint; // in milliseconds
 }
 
 interface KibanaQueryPeriod {
@@ -9,8 +9,20 @@ interface KibanaQueryPeriod {
     mode: string;
 }
 
-interface KibanaQueryFilter {
+interface KibanaQueryQueryFilter {
+    mode: string; // match
+    field: string;
+    query: string;
+    type: string; // phrase
+}
 
+interface KibanaQueryExistsFilter {
+    field: string;
+}
+
+interface KibanaQueryFilters {
+    query: KibanaQueryQueryFilter[];
+    exists: KibanaQueryExistsFilter[];
 }
 
 interface KibanaQueryQuery {
@@ -28,7 +40,7 @@ interface KibanaDiscoverUrlBuildParameters {
     refreshInterval?: KibanaQueryRefreshInterval;
     period?: KibanaQueryPeriod;
     columns: string[];
-    filters: KibanaQueryFilter[];
+    filters: KibanaQueryFilters;
     index?: string;
     interval?: string;
     query?: string;
@@ -39,7 +51,7 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
     const _g: string[] = []
 
     if (refreshInterval) {
-        _g.push(`refreshInterval:(pause:${refreshInterval.pause ? refreshInterval.pause : '!f'},value:${refreshInterval.value})`)
+        _g.push(`refreshInterval:(pause:${refreshInterval.pause ? '!t' : '!f'},value:${refreshInterval.value})`)
     }
 
     if (!period) {
@@ -64,6 +76,24 @@ export function buildDiscoverUrl({host, refreshInterval, period, columns, filter
     }
 
     _a.push(`interval:${interval}`)
+
+    const queryFilters = []
+    if (filters.query && filters.query.length > 0) {
+        filters.query.forEach((filter) => {
+            queryFilters.push(`${filter.mode}:(${filter.field}:(query:${filter.query},type:${filter.type}))`)
+        })
+    }
+
+    const existsFilters = []
+    if (filters.exists && filters.exists.length > 0) {
+        filters.exists.forEach((filter) => {
+            existsFilters.push(`field:${filter.field}`)
+        })
+    }
+
+    // TODO: "meta" parameter is needed within filters to display active filters in toolbar ; however, this depends on index pattern being provided
+    // TODO: repeat filter within filter for each filter (query, exists, etc.)
+    _a.push(`filters:!(('$state':(store:appState),query:(${queryFilters.join(',')}),exists:(${existsFilters.join(',')})))`)
 
     const kibanaQuery: KibanaQueryQuery = {
         language: 'lucene',

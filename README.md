@@ -31,12 +31,18 @@ const url = kub.buildDiscoverUrl({
 
 | Parameter | Type | Default | Required | Example |
 |---|---|---|---|---|
-| `host` | `string` | - | x | `http://kibana:5601` |
+| `host` | `string` | | ✅ | `http://kibana:5601` |
 | `columns` | `string[]` | `[]` | | `['_source', 'log']` |
 | `filters` | `KibanaQueryFilter[]` | `[]` | | `[]` |
-| `query` | `string` | - | | `foo AND bar` |
+| `query` | `string` | | | `foo AND bar` |
 | `period` | `KibanaQueryPeriod` | `{ "from": "now-15m", "mode": "quick", "to": "now" }` | | |
-| `index` | `string` | - | | `my-index-pattern` |
+| `index` | `string` | | | `my-index-pattern` |
 | `interval` | `string` | `auto` | | `15m` |
 | `refreshInterval` | `KibanaQueryRefreshInterval` | `{ "pause": true, "value": 300000 }` | | |
 | `sort` | `KibanaQuerySort` | `{ "field": "@timestamp", "direction": "desc" }` | | |
+
+## Enhancements
+
+* [ ] Add support for filters: WIP
+* [ ] Add documentation for advanced period
+* [ ] Add support for Visualize query
