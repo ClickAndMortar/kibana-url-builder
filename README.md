@@ -2,7 +2,7 @@
 
 This library allows building Kibana URLs, for instance when sending notifications.
 
-:warning: Resulting URLs have currently only been tested on Kibana 6.x.
+:warning:  Generated Kibana URLs have currently only been tested on Kibana 6.x.
 
 ## Usage
 
