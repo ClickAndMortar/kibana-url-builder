@@ -1,6 +1,6 @@
 {
   "name": "@clickandmortar/kibana-url-builder",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Kibana URL builder",
   "scripts": {
     "build": "tsc",
