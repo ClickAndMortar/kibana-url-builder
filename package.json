@@ -6,7 +6,8 @@
     "build": "tsc",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lint": "eslint src/*"
+    "lint": "eslint src/*",
+    "ci": "@lint"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
