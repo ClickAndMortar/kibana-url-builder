@@ -29,7 +29,7 @@ const url = kub.buildDiscoverUrl({
 
 ### Methods
 
-**`buildDiscoverUrl({host, refreshInterval, period, columns, filters, index, interval, query, sort}: DiscoverUrlBuildParameters): string`**
+**`buildDiscoverUrl ({ host, refreshInterval, period, columns, filters, index, interval, query, sort }: KibanaDiscoverUrlBuildParameters): string`**
 
 | Parameter | Type | Default | Required | Example |
 |---|---|---|---|---|
