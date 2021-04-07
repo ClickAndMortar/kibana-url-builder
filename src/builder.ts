@@ -1,115 +1,86 @@
-interface KibanaQueryRefreshInterval {
-    pause: boolean;
-    value: bigint; // in milliseconds
+import * as rison from 'rison'
+import * as types from './types'
+
+const defaultPeriod: types.KibanaQueryPeriod = {
+  from: 'now-15m',
+  mode: 'quick',
+  to: 'now'
 }
 
-interface KibanaQueryPeriod {
-    from: string;
-    to: string;
-    mode: string;
-}
+export function buildDiscoverUrl ({ host, refreshInterval, period, columns, filters, index, interval, query, sort }: types.KibanaDiscoverUrlBuildParameters): string {
+  if (!columns || columns.length === 0) {
+    columns = ['_source']
+  }
 
-interface KibanaQueryQueryFilter {
-    mode: string; // match
-    field: string;
-    query: string;
-    type: string; // phrase
-}
+  const queryFilters = []
 
-interface KibanaQueryExistsFilter {
-    field: string;
-}
-
-interface KibanaQueryFilters {
-    query: KibanaQueryQueryFilter[];
-    exists: KibanaQueryExistsFilter[];
-}
-
-interface KibanaQueryQuery {
-    language: string;
-    query: string;
-}
-
-interface KibanaQuerySort {
-    field: string;
-    direction: string;
-}
-
-interface KibanaDiscoverUrlBuildParameters {
-    host: string;
-    refreshInterval?: KibanaQueryRefreshInterval;
-    period?: KibanaQueryPeriod;
-    columns: string[];
-    filters: KibanaQueryFilters;
-    index?: string;
-    interval?: string;
-    query?: string;
-    sort?: KibanaQuerySort;
-}
-
-export function buildDiscoverUrl({host, refreshInterval, period, columns, filters, index, interval, query, sort}: KibanaDiscoverUrlBuildParameters): string {
-    const _g: string[] = []
-
-    if (refreshInterval) {
-        _g.push(`refreshInterval:(pause:${refreshInterval.pause ? '!t' : '!f'},value:${refreshInterval.value})`)
+  filters.forEach((filter) => {
+    if (!index) {
+      throw new Error('index pattern is required for filters')
     }
 
-    if (!period) {
-        period = {
-            from: 'now-15m',
-            to: 'now',
-            mode: 'quick'
+    const queryFilter: any = {}
+    queryFilter.$state = { store: 'appState' }
+    queryFilter.meta = {
+      alias: filter.alias ?? null,
+      disabled: false,
+      index: index ?? 'missing-index-pattern',
+      key: filter.field,
+      negate: filter.negate ?? false,
+      type: filter.type
+    }
+
+    if (filter.type === 'exists') {
+      queryFilter.exists = {
+        field: filter.field
+      }
+      queryFilter.meta.value = 'exists'
+    } else if (filter.type === 'query') {
+      const params = {
+        query: filter.value,
+        type: 'phrase'
+      }
+
+      queryFilter.query = {
+        match: {
+          [filter.field]: params
         }
+      }
+
+      queryFilter.meta.value = filter.value
+      queryFilter.meta.params = params
+    } else {
+      throw new Error(`Unknown filter type [${filter.type}]`)
     }
 
-    _g.push(`time:(from:${period.from},mode:${period.mode},to:${period.to})`)
+    queryFilters.push(queryFilter)
+  })
 
-    const _a: string[] = []
-    _a.push(`columns:!(${columns.join(',')})`)
+  interval = interval ?? 'auto'
 
-    if (index) {
-        _a.push(`index:'${index}'`)
-    }
+  sort = sort ?? {
+    field: '@timestamp',
+    direction: 'desc'
+  }
 
-    if (!interval) {
-        interval = 'auto'
-    }
+  const _g: any = {
+    time: Object.assign({}, defaultPeriod, period)
+  }
 
-    _a.push(`interval:${interval}`)
+  if (refreshInterval) {
+    _g.refreshInterval = refreshInterval
+  }
 
-    const queryFilters = []
-    if (filters.query && filters.query.length > 0) {
-        filters.query.forEach((filter) => {
-            queryFilters.push(`${filter.mode}:(${filter.field}:(query:${filter.query},type:${filter.type}))`)
-        })
-    }
+  const _a: any = { columns, interval, filters: queryFilters, sort: [sort.field, sort.direction] }
 
-    const existsFilters = []
-    if (filters.exists && filters.exists.length > 0) {
-        filters.exists.forEach((filter) => {
-            existsFilters.push(`field:${filter.field}`)
-        })
-    }
+  if (index) {
+    _a.index = index
+  }
 
-    // TODO: "meta" parameter is needed within filters to display active filters in toolbar ; however, this depends on index pattern being provided
-    // TODO: repeat filter within filter for each filter (query, exists, etc.)
-    _a.push(`filters:!(('$state':(store:appState),query:(${queryFilters.join(',')}),exists:(${existsFilters.join(',')})))`)
+  _a.query = {
+    language: 'lucene',
+    query: query ?? ''
+  }
 
-    const kibanaQuery: KibanaQueryQuery = {
-        language: 'lucene',
-        query: query ? query : ''
-    }
-
-    _a.push(`query:(language:${kibanaQuery.language},query:'${kibanaQuery.query.replace('\'', '\\\'')}')`)
-
-    if (!sort) {
-        sort = {
-            field: '@timestamp',
-            direction: 'desc'
-        }
-    }
-
-    _a.push(`sort:!('${sort.field}',${sort.direction})`)
-
-    return `${host.replace(/\/$/, '')}/app/kibana#/discover?_g=(${_g.join(',')})&_a=(${_a.join(',')})`
+  return `${host.replace(/\/$/, '')}/app/kibana#/discover?_g=${rison.encode(_g)}&_a=${rison.encode(_a)}`
 }

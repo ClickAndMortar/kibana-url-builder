@@ -1,1 +1,1 @@
-export {buildDiscoverUrl} from './builder'
+export { buildDiscoverUrl } from './builder'
