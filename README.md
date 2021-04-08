@@ -67,7 +67,7 @@ All filters are of type `KibanaQueryFilter` and share the following properties:
 | `value` | <code>string&#124;boolean&#124;number&#124;string[]</code> | - | ✅ | See below examples |
 | `negate` | `boolean` | `false` | - | Negate the filter |
 | `alias` | `string` | _none_ | | Alias for the filter |
-| `disabled` | `boolean` | `false` | Mark filter as disabled |
+| `disabled` | `boolean` | `false` | | Mark filter as disabled |
 
 ##### Exists / Not exists
 
