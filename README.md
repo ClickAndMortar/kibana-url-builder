@@ -64,7 +64,7 @@ All filters are of type `KibanaQueryFilter` and share the following properties:
 |---|---|---|---|---|
 | `type` | `string` | - | ✅ | See below examples |
 | `field` | `string` | - | ✅ | Name of the ES field |
-| `value` | `string|boolean|number|string[]` | - | ✅ | See below examples |
+| `value` | <code>string&#124;boolean&#124;number&#124;string[]</code> | - | ✅ | See below examples |
 | `negate` | `boolean` | `false` | - | Negate the filter |
 | `alias` | `string` | _none_ | | Alias for the filter |
 | `disabled` | `boolean` | `false` | Mark filter as disabled |
