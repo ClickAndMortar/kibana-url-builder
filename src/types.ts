@@ -6,11 +6,11 @@ export interface KibanaQueryRefreshInterval {
 export interface KibanaQueryPeriod {
   from: string;
   to: string;
-  mode: string;
+  mode: 'quick' | 'relative' | 'absolute';
 }
 
 export interface KibanaQueryFilter {
-  type: string; // One of: exists, query, phrases, range
+  type: 'exists' | 'query' | 'phrases' | 'range';
   field: string;
   value?: string|boolean|number|string[]; // Required for query and phrases
   negate: boolean;
@@ -20,7 +20,7 @@ export interface KibanaQueryFilter {
 
 export interface KibanaQuerySort {
   field: string;
-  direction: string;
+  direction: 'desc' | 'asc';
 }
 
 export interface KibanaDiscoverUrlBuildParameters {
