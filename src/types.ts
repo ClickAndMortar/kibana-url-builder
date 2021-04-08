@@ -10,11 +10,12 @@ export interface KibanaQueryPeriod {
 }
 
 export interface KibanaQueryFilter {
-  type: string; // One of: exists, query
+  type: string; // One of: exists, query, phrases, range
   field: string;
-  value?: string|boolean|number; // Required for query
+  value?: string|boolean|number|string[]; // Required for query and phrases
   negate: boolean;
   alias?: string;
+  disabled: boolean;
 }
 
 export interface KibanaQuerySort {
