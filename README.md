@@ -33,13 +33,6 @@ const url = kub.buildDiscoverUrl({
 
 This method returns a stateless Kibana "Discover" URL, which can be shared and used by anyone having access to the Kibana instance.
 
-Currently supported filter types:
-
-* Exists / Not exists
-* Is / Is not
-* One of / Not one of
-* Between / Not between
-
 | Parameter | Type | Default | Required | Example |
 |---|---|---|---|---|
 | `host` | `string` | | ✅ | `http://kibana:5601` |
@@ -54,11 +47,94 @@ Currently supported filter types:
 
 #### Filters
 
-TODO
+When using filters, you must provide the index pattern name using `index` property.
+
+Supported filter types:
+
+* Exists / Not exists (type = `exists`)
+* Is / Is not (type = `query`)
+* One of / Not one of (type = `phrases`)
+* Between / Not between (type = `range`)
+
+"Not" filters can be used setting the `negate` property of the filter to `true`.
+
+All filters are of type `KibanaQueryFilter` and share the following properties:
+
+| Property | Type | Default | Required | Description |
+|---|---|---|---|---|
+| `type` | `string` | - | ✅ | See below examples |
+| `field` | `string` | - | ✅ | Name of the ES field |
+| `value` | `string|boolean|number|string[]` | - | ✅ | See below examples |
+| `negate` | `boolean` | `false` | - | Negate the filter |
+| `alias` | `string` | _none_ | | Alias for the filter |
+| `disabled` | `boolean` | `false` | Mark filter as disabled |
+
+##### Exists / Not exists
+
+```json5
+{
+  type: 'exists',
+  field: 'statusCode'
+}
+```
+
+##### Is / Is not
+
+```json5
+{
+  type: 'query',
+  field: 'namespace',
+  value: 'kube-system'
+}
+```
+
+##### One of / Not one of
+
+```json5
+{
+  type: 'phrases',
+  field: 'namespace',
+  value: ['kube-system', 'default']
+}
+```
+
+##### Between / Not between
+
+```json5
+{
+  type: 'range',
+  field: 'statusCode',
+  value: [400, 499]
+}
+```
 
 #### Period
 
-TODO
+Three period presets are available:
+
+* `quick` and `relative`: dates using [Elasticsearch Date Math](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#date-math), ie. `now`, `now-7d`, etc.
+* `absolute`: absolute dates
+
+##### Quick & Relative periods
+
+```json5
+{
+  from: 'now-7d',
+  to: 'now',
+  mode: 'quick'
+}
+```
+
+
+##### Absolute periods
+
+```json5
+{
+  from: '2021-03-31T22:00:00.000Z',
+  to: '2021-04-02T21:59:59.999Z',
+  mode: 'absolute'
+}
+```
 
 ## Testing
 
@@ -69,8 +145,8 @@ npm run test
 ## Enhancements
 
 * [x] Add support for filters
-* [ ] Add tests: WIP
+* [ ] Add tests: ⚙️ WIP
 * [x] Add missing filters: is one of, is between
-* [ ] Add documentation for filters
-* [ ] Add documentation for advanced period
+* [x] Add documentation for filters
+* [x] Add documentation for advanced period
 * [ ] Add support for Visualize query
