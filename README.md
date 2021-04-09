@@ -2,7 +2,7 @@
 
 This library allows building Kibana URLs, for instance when sending notifications.
 
-:warning:   Generated Kibana URLs have currently been tested on Kibana 6.x only.
+It has been tested with Kibana 6.x and 7.x versions.
 
 ## Usage
 
@@ -150,3 +150,5 @@ npm run test
 * [x] Add documentation for filters
 * [x] Add documentation for advanced period
 * [ ] Add support for Visualize query
+* [ ] Add support for Kibana Query Language in query
+* [x] Test compatibility with Kibana 7.x
