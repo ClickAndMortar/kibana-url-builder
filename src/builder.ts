@@ -7,7 +7,7 @@ const defaultPeriod: types.KibanaQueryPeriod = {
   to: 'now'
 }
 
-export function buildDiscoverUrl ({ host, refreshInterval, period, columns, filters, index, interval, query, sort }: types.KibanaDiscoverUrlBuildParameters): string {
+export function buildDiscoverUrl ({ host, refreshInterval, period, columns, filters, index, interval, query, sort, language = 'lucene' }: types.KibanaDiscoverUrlBuildParameters): string {
   if (!columns || columns.length === 0) {
     columns = ['_source']
   }
@@ -116,7 +116,7 @@ export function buildDiscoverUrl ({ host, refreshInterval, period, columns, filt
   }
 
   _a.query = {
-    language: 'lucene',
+    language,
     query: query ?? ''
   }
 

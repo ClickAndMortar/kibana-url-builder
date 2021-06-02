@@ -23,6 +23,8 @@ export interface KibanaQuerySort {
   direction: 'desc' | 'asc';
 }
 
+type KibanaQueryLanguage = 'lucene' | 'kuery';
+
 export interface KibanaDiscoverUrlBuildParameters {
   host: string;
   refreshInterval?: KibanaQueryRefreshInterval;
@@ -33,4 +35,5 @@ export interface KibanaDiscoverUrlBuildParameters {
   interval?: string;
   query?: string;
   sort?: KibanaQuerySort;
+  language?: KibanaQueryLanguage;
 }
