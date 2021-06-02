@@ -8,10 +8,6 @@ const defaultPeriod: types.KibanaQueryPeriod = {
 }
 
 export function buildDiscoverUrl ({ host, refreshInterval, period, columns, filters, index, interval, query, sort }: types.KibanaDiscoverUrlBuildParameters): string {
-  if (!columns || columns.length === 0) {
-    columns = ['_source']
-  }
-
   const queryFilters = []
 
   filters.forEach((filter) => {
@@ -109,10 +105,14 @@ export function buildDiscoverUrl ({ host, refreshInterval, period, columns, filt
     _g.refreshInterval = refreshInterval
   }
 
-  const _a: any = { columns, interval, filters: queryFilters, sort: [sort.field, sort.direction] }
+  const _a: any = { interval, filters: queryFilters, sort: [sort.field, sort.direction] }
 
   if (index) {
     _a.index = index
+  }
+
+  if (columns) {
+    _a.columns = columns
   }
 
   _a.query = {

@@ -36,7 +36,7 @@ This method returns a stateless Kibana "Discover" URL, which can be shared and u
 | Parameter | Type | Default | Required | Example |
 |---|---|---|---|---|
 | `host` | `string` | | ✅ | `http://kibana:5601` |
-| `columns` | `string[]` | `['_source']` | | `['_source', 'log']` |
+| `columns` | `string[]` | | | `['_source', 'log']` |
 | `filters` | `KibanaQueryFilter[]` | `[]` | | See below |
 | `query` | `string` | | | `foo AND bar` (Lucene syntax) |
 | `period` | `KibanaQueryPeriod` | `{ "from": "now-15m", "mode": "quick", "to": "now" }` | | See below |
