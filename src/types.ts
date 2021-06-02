@@ -28,7 +28,7 @@ export interface KibanaDiscoverUrlBuildParameters {
   refreshInterval?: KibanaQueryRefreshInterval;
   period?: KibanaQueryPeriod;
   columns?: string[];
-  filters: KibanaQueryFilter[];
+  filters?: KibanaQueryFilter[];
   index?: string;
   interval?: string;
   query?: string;
