@@ -38,12 +38,13 @@ This method returns a stateless Kibana "Discover" URL, which can be shared and u
 | `host` | `string` | | ✅ | `http://kibana:5601` |
 | `columns` | `string[]` | `['_source']` | | `['_source', 'log']` |
 | `filters` | `KibanaQueryFilter[]` | `[]` | | See below |
-| `query` | `string` | | | `foo AND bar` (Lucene syntax) |
+| `query` | `string` | | | `foo AND bar` (syntax of the selected `language`) |
 | `period` | `KibanaQueryPeriod` | `{ "from": "now-15m", "mode": "quick", "to": "now" }` | | See below |
 | `index` | `string` | | When using filters | `my-index-pattern` |
 | `interval` | `string` | `auto` | | `15m` |
 | `refreshInterval` | `KibanaQueryRefreshInterval` | `{ "pause": true, "value": 300000 }` | | |
 | `sort` | `KibanaQuerySort` | `{ "field": "@timestamp", "direction": "desc" }` | | |
+| `language` | `KibanaQueryLanguage` | `lucene` | | `kuery` |
 
 #### Filters
 
